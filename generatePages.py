@@ -127,7 +127,7 @@ def generateLatex(businessData, buildData, codingData, wholeData, meeting_date):
     cpeople = list(itertools.chain(*[codingData[pc]['Members'].split(', ') for pc in cidx]))
     wpeople = list(itertools.chain(*[wholeData[pw]['Members'].split(', ') for pw in widx]))
     # By creating a set, this removes duplicates. Then create a writeable list, comma separated
-    people =  ", ".join(list(set(apeople + bpeople + wpeople)))
+    people =  ", ".join(list(set(apeople + bpeople + cpeople + wpeople)))
 
     # Generate the morning/afternoon labels for each of the entries for this date
     atimes = labelDateCategory(businessData, aidx)
