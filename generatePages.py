@@ -5,7 +5,7 @@ import subprocess
 import calendar
 
 # Boilerplate LaTeX formatting, including the header with all the package setup and color definitions
-header = "\documentclass[16pt]{extarticle} \usepackage[margin=0.6in]{geometry} \usepackage{tikz,lipsum,lmodern} \usepackage[most]{tcolorbox} \\tcbuselibrary{listings,breakable} \usepackage[default]{lato} \usepackage[T1]{fontenc} \usepackage{tikz} \usepackage{dashrule} \usepackage{comment} \usepackage{eso-pic} \usepackage{ifthen} \usepackage{changepage} \usepackage{xcolor} \definecolor{customBlack}{RGB}{46,50,48} \definecolor{buildBlue}{RGB}{198,214,230} \definecolor{codeBlue}{RGB}{211,237,237} \definecolor{businessBlue}{RGB}{156,202,202} \definecolor{lineBlue}{RGB}{0,89,89} \definecolor{textGrey}{RGB}{84,84,84} \definecolor{nameGrey}{RGB}{217,217,217} \definecolor{wholeBlue}{RGB}{188, 217, 223} \color{textGrey} \\renewcommand{\\baselinestretch}{1.3} \\thispagestyle{empty} \\begin{document}"
+header = "\documentclass[16pt]{extarticle} \usepackage[margin=0.6in]{geometry} \usepackage{tikz,lipsum,lmodern} \usepackage[most]{tcolorbox} \\tcbuselibrary{listings,breakable} \usepackage[default]{lato} \usepackage[T1]{fontenc} \usepackage{tikz} \usepackage{dashrule} \usepackage{comment} \usepackage{eso-pic} \usepackage{ifthen} \usepackage{changepage} \usepackage{xcolor} \definecolor{customBlack}{RGB}{46,50,48} \definecolor{buildBlue}{RGB}{198,214,230} \definecolor{codeBlue}{RGB}{211,237,237} \definecolor{businessBlue}{RGB}{156,202,202} \definecolor{lineBlue}{RGB}{0,89,89} \definecolor{textGrey}{RGB}{84,84,84} \definecolor{nameGrey}{RGB}{217,217,217} \definecolor{wholeBlue}{RGB}{188, 217, 223} \color{textGrey} \\renewcommand{\\baselinestretch}{1.3} \\pagestyle{empty} \\begin{document}"
 header += "\AddToShipoutPicture{ \checkoddpage \ifoddpage \put(0,0){\includegraphics[width=\paperwidth]{../figs/oddPage2.png}} \else     \put(0,0){\includegraphics[width=\paperwidth]{../figs/evenPage.png}} \\fi }"
 footer = "\end{document}"
 
@@ -140,8 +140,12 @@ def generateLatex(businessData, buildData, codingData, wholeData, meeting_date):
     # Generate the header block with the date and members list
     date = "\\begin{tcolorbox}[colback=customBlack,colframe=white!,coltext=white,sidebyside, lower separated=false, after skip=20pt plus 2pt]  {\Huge " + date_pretty + "}   \\tcblower  \\begingroup      \\fontsize{11.9pt}{10pt}\selectfont      \\textcolor{nameGrey}{ATTENDEES: " + people + "}  \endgroup \end{tcolorbox}"
 
+    print(date_pretty)
+    print(people)
+
     # For each of our three headers, write the header (including the dotted line)
     # Then, within each header, if that subteam has entries, generate the color box for each entry
+
 
     focus = "{\Large \\textbf{FOCUS }} \\textcolor{lineBlue}{\hdashrule[0.5ex]{16.1cm}{0.5mm}{2mm 1.5pt}}"
     if bIs: focus += " ".join([buildBlock(buildData[bidx[fb]]['Focus'], btimes[fb]) for fb in xrange(len(bidx))])
@@ -154,7 +158,7 @@ def generateLatex(businessData, buildData, codingData, wholeData, meeting_date):
     if cIs: summary += " ".join([codingBlock(codingData[cidx[sc]]['Summary'], ctimes[sc]) for sc in xrange(len(cidx))])
     if aIs: summary += " ".join([businessBlock(businessData[aidx[sa]]['Summary'], atimes[sa]) for sa in xrange(len(aidx))])
     if wIs: summary += " ".join([wholeBlock(wholeData[widx[sw]]['Summary'], wtimes[sw]) for sw in xrange(len(widx))])
-
+ 
     challenges = "{\Large \\textbf{CHALLENGES }} \\textcolor{lineBlue}{\hdashrule[0.5ex]{14.7cm}{0.5mm}{2mm 1.5pt}}" 
     if bIs: challenges += " ".join([buildBlock(buildData[bidx[cb]]['Challenges/Problems'], btimes[cb]) for cb in xrange(len(bidx))])
     if cIs: challenges += " ".join([codingBlock(codingData[cidx[cc]]['Challenges/Problems'], ctimes[cc]) for cc in xrange(len(cidx))])
@@ -169,6 +173,7 @@ def generateLatex(businessData, buildData, codingData, wholeData, meeting_date):
 
     # Gather all of the material in order. "material" is a string file that contains the entire LaTeX document
     material = header + date + focus + summary + challenges + nextSteps + footer
+    
 
     # Need to reformat date to not use backslashes in the filename
     save_date = meeting_date.replace('/', '_')
@@ -198,6 +203,7 @@ if __name__ == '__main__':
 
     # For each date, create the file
     for i in xrange(len(dateList)):
+        print(dateList[i])
         # This generates the latex file
         fileName = generateLatex(aData, bData, cData, wData, dateList[i])
         # This generates the pdf and then the png
